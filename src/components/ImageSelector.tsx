@@ -80,7 +80,7 @@ export const ImageSelector: React.FC<ImageSelectorProps> = ({ imageUrl, onSetFro
     }
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-4">
             <div className="relative select-none" ref={containerRef}>
                 <img
                     ref={imageRef}
@@ -105,7 +105,7 @@ export const ImageSelector: React.FC<ImageSelectorProps> = ({ imageUrl, onSetFro
                 )}
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 h-20">
                 <button
                     onClick={() => selection && onSetFront(selection)}
                     disabled={!selection || selection.width === 0}

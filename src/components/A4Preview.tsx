@@ -17,7 +17,7 @@ export const A4Preview: React.FC<A4PreviewProps> = ({ title, imageUrl, selection
     return (
         <div className="flex flex-col gap-2 w-full">
             <h3 className="font-semibold text-gray-700">{title}</h3>
-            <div className="relative w-full a4-aspect bg-white shadow-md border border-gray-200 overflow-hidden">
+            <div className="relative w-full a4-aspect bg-white shadow-md border border-gray-200 overflow-hidden h-[300px]">
                 {imageUrl && selection && selection.width > 0 && selection.height > 0 ? (
                     <div className="w-full h-full relative">
                         <img

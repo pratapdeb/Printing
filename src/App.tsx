@@ -1,103 +1,50 @@
 import { useState } from 'react';
-import { UploadPanel } from './components/UploadPanel';
-import { ImageSelector } from './components/ImageSelector';
-import { PreviewPanel } from './components/PreviewPanel';
+import { CardTab } from './components/tabs/CardTab';
+import { PassportPhotoTab } from './components/tabs/PassportPhotoTab';
 
-
-interface Selection {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-}
+type TabType = 'passport' | 'card';
 
 function App() {
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [frontSelection, setFrontSelection] = useState<Selection | null>(null);
-  const [backSelection, setBackSelection] = useState<Selection | null>(null);
+  const [activeTab, setActiveTab] = useState<TabType>('card');
 
-  const handleImageSelect = (url: string) => {
-    setImageUrl(url);
-    setFrontSelection(null);
-    setBackSelection(null);
-  };
-
-  const handlePrint = () => {
-    window.print();
-  };
+  const tabs = [
+    { id: 'passport' as TabType, label: 'Photo' },
+    { id: 'card' as TabType, label: 'Card' },
+  ];
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
       {/* Header */}
-      <header className="bg-white shadow-sm p-4 no-print">
-        <h1 className="text-xl font-bold text-gray-800">React Document Crop-to-A4 Layout Assistant</h1>
+      <header className="bg-white shadow-sm no-print">
+        <div className="p-4">
+          <h1 className="text-xl font-bold text-gray-800">Document Crop-to-A4 Layout Assistant</h1>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200">
+          <nav className="flex space-x-8 px-4" aria-label="Tabs">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`
+                  py-4 px-1 border-b-2 font-medium text-sm transition-colors
+                  ${activeTab === tab.id
+                    ? 'border-blue-500 text-blue-600'
+                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  }
+                `}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
       </header>
 
-      {/* Main Content */}
-      <main className="flex-1 flex overflow-hidden no-print">
-        {/* Left Side: Upload & Selection */}
-        <div className="w-1/2 flex flex-col border-r border-gray-200 bg-white overflow-y-auto">
-          <UploadPanel onImageSelect={handleImageSelect} />
-          <div className="p-4 flex-1">
-            <h2 className="text-lg font-semibold mb-4">2. Select Regions</h2>
-            <ImageSelector
-              imageUrl={imageUrl}
-              onSetFront={setFrontSelection}
-              onSetBack={setBackSelection}
-            />
-          </div>
-        </div>
-
-        {/* Right Side: Previews */}
-        <div className="w-1/2 bg-gray-50">
-          <PreviewPanel
-            imageUrl={imageUrl}
-            frontSelection={frontSelection}
-            backSelection={backSelection}
-            onPrint={handlePrint}
-          />
-        </div>
-      </main>
-
-      {/* Print Layout - Visible only when printing */}
-      {/* Print Layout - Visible only when printing */}
-      <div className="print-only hidden">
-        <div className="w-full h-screen flex flex-row items-start justify-center gap-8 pt-12">
-          {/* Front Card */}
-          <div style={{ width: '8.5cm', height: '5.5cm' }} className="relative border border-gray-300 overflow-hidden">
-            {imageUrl && frontSelection && (
-              <img
-                src={imageUrl}
-                alt="Front"
-                className="absolute origin-top-left max-w-none"
-                style={{
-                  left: `-${(frontSelection.x * 100) / frontSelection.width}%`,
-                  top: `-${(frontSelection.y * 100) / frontSelection.height}%`,
-                  width: `${100 / frontSelection.width}%`,
-                  height: `${100 / frontSelection.height}%`,
-                }}
-              />
-            )}
-          </div>
-
-          {/* Back Card */}
-          <div style={{ width: '8.5cm', height: '5.5cm' }} className="relative border border-gray-300 overflow-hidden">
-            {imageUrl && backSelection && (
-              <img
-                src={imageUrl}
-                alt="Back"
-                className="absolute origin-top-left max-w-none"
-                style={{
-                  left: `-${(backSelection.x * 100) / backSelection.width}%`,
-                  top: `-${(backSelection.y * 100) / backSelection.height}%`,
-                  width: `${100 / backSelection.width}%`,
-                  height: `${100 / backSelection.height}%`,
-                }}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Tab Content */}
+      {activeTab === 'passport' && <PassportPhotoTab />}
+      {activeTab === 'card' && <CardTab />}
     </div>
   );
 }
