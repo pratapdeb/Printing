@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { CardTab } from './components/tabs/CardTab';
 import { PassportPhotoTab } from './components/tabs/PassportPhotoTab';
+import { PvcTab } from './components/tabs/PvcTab';
 
-type TabType = 'passport' | 'card';
+type TabType = 'passport' | 'card' | 'pvc';
 
 function App() {
   const [activeTab, setActiveTab] = useState<TabType>('card');
@@ -10,6 +11,7 @@ function App() {
   const tabs = [
     { id: 'passport' as TabType, label: 'Photo' },
     { id: 'card' as TabType, label: 'Card' },
+    { id: 'pvc' as TabType, label: 'PVC' },
   ];
 
   return (
@@ -45,6 +47,7 @@ function App() {
       {/* Tab Content */}
       {activeTab === 'passport' && <PassportPhotoTab />}
       {activeTab === 'card' && <CardTab />}
+      {activeTab === 'pvc' && <PvcTab />}
     </div>
   );
 }
